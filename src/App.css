@@ -1,5 +1,6 @@
-.App {
+.App,body,#root,#map {
   text-align: center;
+  height: 100%;
 }
 
 .App-logo {
