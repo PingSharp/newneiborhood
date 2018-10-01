@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-import Map from './Map'
+import Map from './Map';
+
 
 const mapHeight = window.innerHeight;
 class App extends Component {

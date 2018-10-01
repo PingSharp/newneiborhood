@@ -1,4 +1,4 @@
-.App,body,#root,#map {
+.App,body,#root {
   text-align: center;
   height: 100%;
 }
@@ -7,6 +7,16 @@
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
 }
+.mapContainer{
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+#pano {
+  width: 300px;
+  height: 300px;
+} 
 
 .App-header {
   background-color: #222;
@@ -26,4 +36,43 @@
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+#map {
+  width: 70%;
+  height: 100%;
+}
+.ListContainer{
+  width: 30%;
+  background-color: lightblue;
+}
+.List {
+  list-style: none;
+  display: block;
+  padding: 10px;
+  float: left;
+  position: absolute;
+  top: 90px;
+}
+.ListItem {
+  padding: 10px;
+  text-align: left;
+}
+.ListItem a {
+   cursor: pointer;
+}
+#search {
+  position: absolute;
+  left: 0px;
+  top: 80px;
+  width: 25%;
+  border-radius: 5px;
+}
+#searchButton {
+  position: absolute;
+  top: 80px;
+  left: 26%;
+  font-size: 0.9em;
+  margin-left: -2px;
+  font-weight: bold;
+  border-radius: 5px;
 }
