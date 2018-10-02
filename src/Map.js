@@ -10,13 +10,24 @@ class Map extends Component{
     this.showInfoWindowForList = this.showInfoWindowForList.bind(this);
     this.state = {
       map: {},
-      locations : [{id:1,title: 'Esslinger Burg(castle)',location: {lat: 48.744706, lng: 9.309553 }},
-      {id:2,title: "L'Osteria Esslingen(Italian restaurant)",location: {lat: 48.741794, lng: 9.3052}},
-      {id:3,title: 'Altes Rathaus(town hall)',location: { lat: 48.742496,lng: 9.307749}},
-      {id:4,title: 'Pizzeria La Gondola(Italian restaurant)', location: {lat: 48.740956,lng:9.305065}},
-      {id:5,title: 'Maille Park',location: { lat: 48.739811,lng: 9.30664}},
-      {id:6,title: 'Weinerlebnispfad(Wine trail)',location: {lat: 48.744452, lng: 9.29973}}],
+      locations : [{id:1,title: 'Esslinger Burg(castle)',location: {lat: 48.744706, lng: 9.309553 },category:'Tourist Attraction'},
+      {id:2,title: "L'Osteria Esslingen(Italian restaurant)",location: {lat: 48.741794, lng: 9.3052},category:'restaurant'},
+      {id:3,title: 'Altes Rathaus(town hall)',location: { lat: 48.742496,lng: 9.307749},category:'Tourist Attraction'},
+      {id:4,title: 'Pizzeria La Gondola(Italian restaurant)', location: {lat: 48.740956,lng:9.305065},category:'restaurant'},
+      {id:5,title: 'Maille Park',location: { lat: 48.739811,lng: 9.30664},category:'park'},
+      {id:6,title: 'Weinerlebnispfad(Wine trail)',location: {lat: 48.744452, lng: 9.29973},category:'Tourist Attraction'},
+      {id:7,title: 'Torbogen Durchgang',location: {lat: 48.74174, lng: 9.306581},category:'Tourist Attraction'},
+      {id:8,title: 'rewe',location: {lat:  48.740515, lng: 9.30052},category:'supermarket'}],
+      showingLocations : [{id:1,title: 'Esslinger Burg(castle)',location: {lat: 48.744706, lng: 9.309553 },category:'Tourist Attraction'},
+      {id:2,title: "L'Osteria Esslingen(Italian restaurant)",location: {lat: 48.741794, lng: 9.3052},category:'restaurant'},
+      {id:3,title: 'Altes Rathaus(town hall)',location: { lat: 48.742496,lng: 9.307749},category:'Tourist Attraction'},
+      {id:4,title: 'Pizzeria La Gondola(Italian restaurant)', location: {lat: 48.740956,lng:9.305065},category:'restaurant'},
+      {id:5,title: 'Maille Park',location: { lat: 48.739811,lng: 9.30664},category:'park'},
+      {id:6,title: 'Weinerlebnispfad(Wine trail)',location: {lat: 48.744452, lng: 9.29973},category:'Tourist Attraction'},
+      {id:7,title: 'Torbogen Durchgang',location: {lat: 48.74174, lng: 9.306581},category:'Tourist Attraction'},
+      {id:8,title: 'rewe',location: {lat:  48.740515, lng: 9.30052},category:'supermarket'} ],
      places: [],
+     showingPlaces: [],
      infoWindow: {}
     }
   }
@@ -53,37 +64,40 @@ class Map extends Component{
         this.getGoogleMaps();
       }
       changeShowingArea() {
-        let newMap = this.state.map;
-        // Initialize the geocoder.
-        var geocoder = new google.maps.Geocoder();
-        // Get the address or place that the user entered.
+        let newLocations = this.state.showingLocations;
+        let staticLocations = this.state.locations;
+        let staticMarkers = this.state.places;
+        let newMarkers = this.state.showingPlaces;
+        // Get the address or place that the user selected.
         var address = document.getElementById('search').value;
-        // Make sure the address isn't blank.
-        if (address === '') {
-          window.alert('You must enter an area, or address.');
-        } else {
-          // Geocode the address/area entered to get the center. Then, center the map
-          // on it and zoom in
-          geocoder.geocode(
-            { address: address,
-              componentRestrictions: {locality: 'New York'}
-            }, function(results, status) {
-              if (status === google.maps.GeocoderStatus.OK) {
-                newMap = newMap.setCenter(results[0].geometry.location);                             
-              } else {
-                window.alert('We could not find that location - try entering a more' +
-                    ' specific place.');
-              }
-            });         
-          }
+        if(address==='All'){
+          newLocations = staticLocations;
+          newMarkers = staticMarkers;
+          newMarkers.forEach((marker)=>marker.setMap(this.state.map));
+        }
+        else{
+          newLocations = staticLocations.filter((location)=>location.category===address);
+          let titles = newLocations.map((location)=>location.title);
+          newMarkers = staticMarkers.filter((marker)=>titles.includes(marker.title));
+          let hideMarkers = staticMarkers.filter((marker)=>!titles.includes(marker.title));
+          hideMarkers.forEach((marker)=>marker.setMap(null));
+          newMarkers.forEach((marker)=>marker.setMap(this.state.map));
+        }
+          
+        
         this.setState({
-          map: newMap
+          showingLocations: newLocations,
+          showingPlaces: newMarkers
         }
         )
       }
        showInfoWindowForList(text){
-         debugger;
+        
         let marker =  this.state.places.filter(place=>place.title === text);
+        let query = marker[0].title;
+        let place;
+        let Esslinen = {lat:  marker[0].position.lat(), lng: marker[0].position.lng()};
+        marker[0].setAnimation(google.maps.Animation.BOUNCE);
         let infoWindow = this.state.infoWindow;
         let map = this.state.map;
         if (infoWindow.marker !== marker[0]) {
@@ -93,8 +107,15 @@ class Map extends Component{
           // Make sure the marker property is cleared if the infowindow is closed.
           this.state.infoWindow.addListener('closeclick',function(){
             infoWindow.marker = null;
+            marker[0].setAnimation(null);
           });
           var streetViewService = new google.maps.StreetViewService();
+          let service = new google.maps.places.PlacesService(this.state.map);
+          let request = {
+            location: Esslinen,
+            query: query,
+            radius: '1000'
+          }
           var radius = 50;
           // In case the status is OK, which means the pano was found, compute the
           // position of the streetview image, then calculate the heading, then get a
@@ -115,17 +136,29 @@ class Map extends Component{
               var panorama = new google.maps.StreetViewPanorama(
                 document.getElementById('pano'), panoramaOptions);
             } else {
-              infoWindow.setContent('<div>' + marker[0].title + '</div>' +
-                '<div>No Street View Found</div>');
+              service.textSearch(request,getInfos);
+              function getInfos(results,status){
+                if (status == google.maps.places.PlacesServiceStatus.OK) {             
+                  place = results[0]; 
+                  infoWindow.setContent('<div>' + marker[0].title + '</div>'+'<div>'+place.formatted_address+'</div>' 
+                );
+              }
+              else{
+                infoWindow.setContent('<div>' + marker[0].title + '</div>' 
+              );
+              }
+             
+                
             }
           }
-          // Use streetview service to get the closest streetview image within
+          
+        }
+        // Use streetview service to get the closest streetview image within
           // 50 meters of the markers position
           streetViewService.getPanoramaByLocation(marker[0].position, radius, getStreetView);
           // Open the infowindow on the correct marker.
           infoWindow.open(map, marker[0]);
-        }
-       }
+       }}
       componentDidMount() {
         // Once the Google Maps API has finished loading, initialize the map
         this.getGoogleMaps().then((google) => {
@@ -152,7 +185,8 @@ class Map extends Component{
             });
           placesArray.push(marker);
             this.setState({
-              places: placesArray
+              places: placesArray,
+              showingPlaces: placesArray
             })
             bounds.extend(marker.position);
           })
@@ -170,8 +204,8 @@ class Map extends Component{
     render(){
         return(
             <div className="mapContainer">
-            <ListView findArea={this.changeShowingArea} locations = {this.state.locations} 
-            map={this.state.map} places={this.state.places} infoWindow = {this.state.infoWindow}
+            <ListView findArea={this.changeShowingArea} locations = {this.state.showingLocations} 
+            map={this.state.map} places={this.state.showingPlaces} infoWindow = {this.state.infoWindow}
             showInfoWindow={this.showInfoWindowForList} />
             <div id="map">
             </div>
