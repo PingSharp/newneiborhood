@@ -91,12 +91,20 @@ class Map extends Component{
         }
         )
       }
-       showInfoWindowForList(text){
-        
+    
+     showInfoWindowForList(text){
+      let service = new google.maps.places.PlacesService(this.state.map);
+      let place;
+      let Content;
         let marker =  this.state.places.filter(place=>place.title === text);
         let query = marker[0].title;
-        let place;
         let Esslinen = {lat:  marker[0].position.lat(), lng: marker[0].position.lng()};
+        let request = {
+          location: Esslinen,
+          query: query,
+          radius: '1000'
+        }
+       
         marker[0].setAnimation(google.maps.Animation.BOUNCE);
         let infoWindow = this.state.infoWindow;
         let map = this.state.map;
@@ -109,23 +117,36 @@ class Map extends Component{
             infoWindow.marker = null;
             marker[0].setAnimation(null);
           });
+          this.state.infoWindow.addListener('content_changed',function(){
+            infoWindow.marker = null;
+            marker[0].setAnimation(null);
+          })
           var streetViewService = new google.maps.StreetViewService();
-          let service = new google.maps.places.PlacesService(this.state.map);
-          let request = {
-            location: Esslinen,
-            query: query,
-            radius: '1000'
-          }
+          
           var radius = 50;
+          
           // In case the status is OK, which means the pano was found, compute the
           // position of the streetview image, then calculate the heading, then get a
           // panorama from that and set the options
           function getStreetView(data, status) {
             if (status === google.maps.StreetViewStatus.OK) {
+              service.textSearch(request,getInfos);
               var nearStreetViewLocation = data.location.latLng;
               var heading = google.maps.geometry.spherical.computeHeading(
                 nearStreetViewLocation, marker[0].position);
-                infoWindow.setContent('<div>' + marker[0].title + '</div><div id="pano"></div>');
+              Content = '<div>' + marker[0].title + '</div><div id="pano"></div>';
+                
+            
+                function getInfos(results,status){
+                  if (status == google.maps.places.PlacesServiceStatus.OK) {             
+                    place = results[0]; 
+                    infoWindow.setContent(Content+'<div>'+place.formatted_address+'</div>');
+                    
+                }
+                else{
+                  infoWindow.setContent(Content) ;
+                 
+                } 
                 var panoramaOptions = {
                   position: nearStreetViewLocation,
                   pov: {
@@ -133,26 +154,29 @@ class Map extends Component{
                     pitch: 30
                   }
                 };
-              var panorama = new google.maps.StreetViewPanorama(
-                document.getElementById('pano'), panoramaOptions);
-            } else {
+                var panorama = new google.maps.StreetViewPanorama(
+                  document.getElementById('pano'), panoramaOptions);               
+              }
+             
+               
+            } else {  
               service.textSearch(request,getInfos);
               function getInfos(results,status){
                 if (status == google.maps.places.PlacesServiceStatus.OK) {             
                   place = results[0]; 
-                  infoWindow.setContent('<div>' + marker[0].title + '</div>'+'<div>'+place.formatted_address+'</div>' 
-                );
+                  infoWindow.setContent('<div>' + marker[0].title + '</div>'+'<div>'+place.formatted_address+'</div>');
+                  
               }
               else{
-                infoWindow.setContent('<div>' + marker[0].title + '</div>' 
-              );
-              }
-             
-                
-            }
+                infoWindow.setContent('<div>' + marker[0].title + '</div>'+'<div>Sorry!We couldnt find anything about this place</div>') ;
+               
+              }             
+            }                                    
+          
           }
           
         }
+
         // Use streetview service to get the closest streetview image within
           // 50 meters of the markers position
           streetViewService.getPanoramaByLocation(marker[0].position, radius, getStreetView);
@@ -199,7 +223,7 @@ class Map extends Component{
          /*  this.setState({
             map: newMap
           }) */
-        });
+        }).catch((error)=>{alert(error.responseText);});
       }
     render(){
         return(
