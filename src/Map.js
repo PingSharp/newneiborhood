@@ -4,6 +4,7 @@ import ListView from './ListView';
  /* global google */ 
 
 class Map extends Component{
+  // initialize  all states and functiona of Map component
   constructor(props){
     super(props);
     this.changeShowingArea = this.changeShowingArea.bind(this);
@@ -31,7 +32,7 @@ class Map extends Component{
      infoWindow: {}
     }
   }
-
+  // initialize google Maps api service as promise;
     getGoogleMaps() {
         // If we haven't already defined the promise, define it
         if (!this.googleMapsPromise) {
@@ -58,17 +59,18 @@ class Map extends Component{
         // Return a promise for the Google Maps API
         return this.googleMapsPromise;
       }
-    
-      componentWillMount() {
-        // Start Google Maps API loading since we know we'll soon need it
+       // Start Google Maps API loading since we know we'll soon need it
+      componentWillMount() {       
         this.getGoogleMaps();
       }
+     /*  According to the selected option of the dropdown list 
+      change the showing markers. */
       changeShowingArea() {
         let newLocations = this.state.showingLocations;
         let staticLocations = this.state.locations;
         let staticMarkers = this.state.places;
         let newMarkers = this.state.showingPlaces;
-        // Get the address or place that the user selected.
+        // Get the option that the user selected.
         var address = document.getElementById('search').value;
         if(address==='All'){
           newLocations = staticLocations;
@@ -82,16 +84,15 @@ class Map extends Component{
           let hideMarkers = staticMarkers.filter((marker)=>!titles.includes(marker.title));
           hideMarkers.forEach((marker)=>marker.setMap(null));
           newMarkers.forEach((marker)=>marker.setMap(this.state.map));
-        }
-          
-        
+        }                  
         this.setState({
           showingLocations: newLocations,
           showingPlaces: newMarkers
         }
         )
       }
-    
+   /*  when a marker or a list item is geclicked, this function will be used to 
+    get the infos about this place and show the infos */
      showInfoWindowForList(text){
       let service = new google.maps.places.PlacesService(this.state.map);
       let place;
@@ -103,8 +104,7 @@ class Map extends Component{
           location: Esslinen,
           query: query,
           radius: '1000'
-        }
-       
+        }       
         marker[0].setAnimation(google.maps.Animation.BOUNCE);
         let infoWindow = this.state.infoWindow;
         let map = this.state.map;
@@ -112,7 +112,8 @@ class Map extends Component{
           infoWindow.marker = marker[0];
           infoWindow.setContent('');
           infoWindow.open(map,marker[0]);
-          // Make sure the marker property is cleared if the infowindow is closed.
+          /*  Make sure the marker property and the animation of the marker
+           is cleared if the infowindow is closed. */
           this.state.infoWindow.addListener('closeclick',function(){
             infoWindow.marker = null;
             marker[0].setAnimation(null);
@@ -121,31 +122,26 @@ class Map extends Component{
             infoWindow.marker = null;
             marker[0].setAnimation(null);
           })
-          var streetViewService = new google.maps.StreetViewService();
-          
-          var radius = 50;
-          
-          // In case the status is OK, which means the pano was found, compute the
-          // position of the streetview image, then calculate the heading, then get a
-          // panorama from that and set the options
+          var streetViewService = new google.maps.StreetViewService();          
+          var radius = 50;          
           function getStreetView(data, status) {
+            /*  In case the status is OK, which means the pano was found, compute the
+           position of the streetview image, then calculate the heading, then get a
+           panorama from that and set the options */
             if (status === google.maps.StreetViewStatus.OK) {
               service.textSearch(request,getInfos);
               var nearStreetViewLocation = data.location.latLng;
               var heading = google.maps.geometry.spherical.computeHeading(
                 nearStreetViewLocation, marker[0].position);
               Content = '<div>' + marker[0].title + '</div><div id="pano"></div>';
-                
-            
+              // get the infomations about the place(for example: address)                            
                 function getInfos(results,status){
                   if (status == google.maps.places.PlacesServiceStatus.OK) {             
                     place = results[0]; 
-                    infoWindow.setContent(Content+'<div>'+place.formatted_address+'</div>');
-                    
+                    infoWindow.setContent(Content+'<div>'+place.formatted_address+'</div>');                    
                 }
                 else{
-                  infoWindow.setContent(Content) ;
-                 
+                  infoWindow.setContent(Content) ;                 
                 } 
                 var panoramaOptions = {
                   position: nearStreetViewLocation,
@@ -156,27 +152,20 @@ class Map extends Component{
                 };
                 var panorama = new google.maps.StreetViewPanorama(
                   document.getElementById('pano'), panoramaOptions);               
-              }
-             
-               
+              }                            
             } else {  
               service.textSearch(request,getInfos);
               function getInfos(results,status){
                 if (status == google.maps.places.PlacesServiceStatus.OK) {             
                   place = results[0]; 
-                  infoWindow.setContent('<div>' + marker[0].title + '</div>'+'<div>'+place.formatted_address+'</div>');
-                  
+                  infoWindow.setContent('<div>' + marker[0].title + '</div>'+'<div>'+place.formatted_address+'</div>');                  
               }
               else{
-                infoWindow.setContent('<div>' + marker[0].title + '</div>'+'<div>Sorry!We couldnt find anything about this place</div>') ;
-               
+                infoWindow.setContent('<div>' + marker[0].title + '</div>'+'<div>Sorry!We couldnt find anything about this place</div>') ;               
               }             
-            }                                    
-          
-          }
-          
+            }                                              
+          }          
         }
-
         // Use streetview service to get the closest streetview image within
           // 50 meters of the markers position
           streetViewService.getPanoramaByLocation(marker[0].position, radius, getStreetView);
@@ -196,6 +185,7 @@ class Map extends Component{
           this.setState({
             map: map
           })
+          // initialize the markers
           this.state.locations.forEach(place=>{
             let marker = new google.maps.Marker({
               position: place.location,
@@ -214,15 +204,12 @@ class Map extends Component{
             })
             bounds.extend(marker.position);
           })
+          // initialize the infowindow;
           let InfoWindows = new google.maps.InfoWindow();
           this.setState({
             infoWindow: InfoWindows
           })
-          // let newMap = this.state.map;
           map.fitBounds(bounds);
-         /*  this.setState({
-            map: newMap
-          }) */
         }).catch((error)=>{alert(error.responseText);});
       }
     render(){

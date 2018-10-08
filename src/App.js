@@ -6,6 +6,8 @@ import Map from './Map';
 const mapHeight = window.innerHeight;
 
 class App extends Component {
+  /* This function is responsible for the show and hide the menu 
+  when the screen size is smaller than 640px. */
   showMenu(target){
     let list = document.querySelector(".ListContainer");
     if(list.classList.contains("hide")){

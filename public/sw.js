@@ -20,10 +20,8 @@ self.addEventListener('install', function(event) {
   
       event.waitUntil(
         caches.open(CACHE_NAME)
-          .then(function(cache) {
-            
-                // We will cache initial page 
-                // We could also cache assets like CSS and images
+          .then(function(cache) {            
+                // We will cache initial page and assets like CSS and images
                 const urlsToCache = [
                   '/',
                  'App.css',
@@ -38,11 +36,12 @@ self.addEventListener('install', function(event) {
       );
     
   });
-// Here we intercept request and serve up the matching files
+/*  Here we intercept request and serve up the matching files 
+if there is already a response in cache,the response will be return,
+otherwise a new fetch request will be done and in cache stored; */
 self.addEventListener('fetch', function(event) {
    const src =event.request.url;
   if(src.startsWith("https:")){
-    // event.request.mode = 'no-cors';
     const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
     const Url = PROXY_URL+src;
     event.request.url = Url;
@@ -68,6 +67,5 @@ self.addEventListener('fetch', function(event) {
             return resp;
           });
         })
-      );}
-    
+      );}    
 });  
