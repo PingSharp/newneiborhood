@@ -66,6 +66,11 @@ class Map extends Component{
      /*  According to the selected option of the dropdown list 
       change the showing markers. */
       changeShowingArea() {
+        const filteroption = document.getElementById('search');
+        const optionIndex = filteroption.selectedIndex;
+        let selecteditems = document.querySelectorAll("[aria-selected*='true']");
+        selecteditems.forEach(a=>a.removeAttribute('aria-selected','true'));
+        filteroption[optionIndex].setAttribute("aria-selected", "true");
         let newLocations = this.state.showingLocations;
         let staticLocations = this.state.locations;
         let staticMarkers = this.state.places;
@@ -133,12 +138,12 @@ class Map extends Component{
               var nearStreetViewLocation = data.location.latLng;
               var heading = google.maps.geometry.spherical.computeHeading(
                 nearStreetViewLocation, marker[0].position);
-              Content = '<div>' + marker[0].title + '</div><div id="pano"></div>';
+              Content = '<div  tabIndex="0">' + marker[0].title + '</div><div id="pano"></div>';
               // get the infomations about the place(for example: address)                            
                 function getInfos(results,status){
                   if (status == google.maps.places.PlacesServiceStatus.OK) {             
                     place = results[0]; 
-                    infoWindow.setContent(Content+'<div>'+place.formatted_address+'</div>');                    
+                    infoWindow.setContent(Content+'<div tabIndex="0">'+place.formatted_address+'</div>');                    
                 }
                 else{
                   infoWindow.setContent(Content) ;                 
@@ -158,10 +163,10 @@ class Map extends Component{
               function getInfos(results,status){
                 if (status == google.maps.places.PlacesServiceStatus.OK) {             
                   place = results[0]; 
-                  infoWindow.setContent('<div>' + marker[0].title + '</div>'+'<div>'+place.formatted_address+'</div>');                  
+                  infoWindow.setContent('<div  tabIndex="0">' + marker[0].title + '</div>'+'<div tabIndex="0">'+place.formatted_address+'</div>');                  
               }
               else{
-                infoWindow.setContent('<div>' + marker[0].title + '</div>'+'<div>Sorry!We couldnt find anything about this place</div>') ;               
+                infoWindow.setContent('<div  tabIndex="0">' + marker[0].title + '</div>'+'<div  tabIndex="0">Sorry!We couldnt find anything about this place</div>') ;               
               }             
             }                                              
           }          
@@ -218,7 +223,7 @@ class Map extends Component{
             <ListView findArea={this.changeShowingArea} locations = {this.state.showingLocations} 
             map={this.state.map} places={this.state.showingPlaces} infoWindow = {this.state.infoWindow}
             showInfoWindow={this.showInfoWindowForList} />
-            <div id="map">
+            <div id="map" role="application">
             </div>
             </div>
         )
