@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 const mapHeight = window.innerHeight;
 const ListView = ({
@@ -9,9 +10,8 @@ const ListView = ({
         return(
             <div  className="ListContainer hide" style={{height: mapHeight}}>
                 <h1 tabIndex="0"  role="heading">Esslingen Location</h1>
-                <select tabIndex="0"  role="menu" id="search" defaultValue={'select'} onChange={findArea}>
-                 <option  value='select' disabled>select...</option>
-                  <option role="menuitem" value='All'>All</option>
+                <select tabIndex="0"  role="menu" id="search" defaultValue={'All'} onChange={findArea}>
+                  <option role="menuitem" value='All' aria-selected='true' >All</option>
                   <option role="menuitem" value='Tourist Attraction'>Tourist Attraction</option> 
                   <option role="menuitem" value='restaurant'>restaurant</option>
                   <option role="menuitem" value='park'>Park</option> 
@@ -19,13 +19,17 @@ const ListView = ({
                 </select>
                 <ul   className="List">
                     {locations.map((location)=>{
-                        return <li role="link" tabIndex="0" className="ListItem" key={location.id}><a onClick={(event)=>{showInfoWindow(event.target.text)}}>{location.title}</a></li>
+                        return <li  tabIndex='0' role="link" className="ListItem" key={location.id}><a  onClick={(event)=>{showInfoWindow(event.target.text)}}>{location.title}</a></li>
                     })}
                 </ul>
             </div>
         )
     }
-    
+    ListView.PropTypes = {
+        findArea: PropTypes.func,
+        locations: PropTypes.array.isRequired,
+        showInfoWindow: PropTypes.func
+    }
 
 
 export default ListView;
