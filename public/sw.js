@@ -16,56 +16,57 @@ self.addEventListener('activate', event => {
   );
 });
 // This triggers when user starts the app
-self.addEventListener('install', function(event) {
-  
-      event.waitUntil(
-        caches.open(CACHE_NAME)
-          .then(function(cache) {            
-                // We will cache initial page and assets like CSS and images
-                const urlsToCache = [
-                  '/',
-                 'App.css',
-                 'App.js',
-                 'index.js',
-                 'ListView.js',
-                 'Map.js',
-                ];
-                cache.addAll(urlsToCache);
-              
-          })
-      );
-    
-  });
+self.addEventListener('install', function (event) {
+
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(function (cache) {
+        // We will cache initial page and assets like CSS and images
+        const urlsToCache = [
+          '/',
+          'App.css',
+          'App.js',
+          'index.js',
+          'ListView.js',
+          'Map.js',
+        ];
+        cache.addAll(urlsToCache);
+
+      })
+  );
+
+});
 /*  Here we intercept request and serve up the matching files 
 if there is already a response in cache,the response will be return,
 otherwise a new fetch request will be done and in cache stored; */
-self.addEventListener('fetch', function(event) {
-   const src =event.request.url;
-  if(src.startsWith("https:")){
+self.addEventListener('fetch', function (event) {
+  const src = event.request.url;
+  if (src.startsWith("https:")) {
     const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
-    const Url = PROXY_URL+src;
+    const Url = PROXY_URL + src;
     event.request.url = Url;
-    event.respondWith(caches.match(event.request).then(function(response){
-      return response || fetch(event.request).then(function(resp){
-        caches.open(CACHE_NAME).then(function(cache){
+    event.respondWith(caches.match(event.request).then(function (response) {
+      return response || fetch(event.request).then(function (resp) {
+        caches.open(CACHE_NAME).then(function (cache) {
           cache.add(Url);
-        }).catch((error)=>console.log(error));
+        }).catch((error) => console.log(error));
         return resp;
-      }).catch(function(error){
+      }).catch(function (error) {
         console.log(error);
       })
     }
-     ))
-  } 
-  else{
+    ))
+  }
+  else {
     event.respondWith(
-        caches.match(event.request).then(function(response) {
-          return response || fetch(event.request).then(function (resp) {
-            caches.open(CACHE_NAME).then(function (cache) {
-              cache.add(event.request.url);
-            }).catch((error)=>console.log(error));
-            return resp;
-          });
-        })
-      );}    
+      caches.match(event.request).then(function (response) {
+        return response || fetch(event.request).then(function (resp) {
+          caches.open(CACHE_NAME).then(function (cache) {
+            cache.add(event.request.url);
+          }).catch((error) => console.log(error));
+          return resp;
+        });
+      })
+    );
+  }
 });  

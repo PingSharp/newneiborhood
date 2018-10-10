@@ -24,7 +24,7 @@ class App extends Component {
   render() {
     return (
       <div className="App" style={{ height: mapHeight }} >
-      <button id='menuItem' aria-pressed="false" onClick={(event)=>this.showMenu(event.target)}>menu</button>
+        <button id='menuItem' aria-pressed="false" onClick={(event)=>this.showMenu(event.target)}>menu</button>
         <Map/>
       </div>
     );

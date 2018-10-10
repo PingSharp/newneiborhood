@@ -1,127 +1,145 @@
-.App,body,#root {
-  text-align: center;
-  height: 100%;
+.App,
+body,
+#root {
+    text-align: center;
+    height: 100%;
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+    animation: App-logo-spin infinite 20s linear;
+    height: 80px;
 }
-.mapContainer{
-  height: 100%;
-  width: 100%;
-  display: flex;
+
+.mapContainer {
+    height: 100%;
+    width: 100%;
+    display: flex;
 }
-#menuItem{
-  display: none;
+
+#menuItem {
+    display: none;
 }
+
 #pano {
-  width: 300px;
-  height: 300px;
-} 
+    width: 300px;
+    height: 300px;
+}
 
 .App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+    background-color: #222;
+    height: 150px;
+    padding: 20px;
+    color: white;
 }
 
 .App-title {
-  font-size: 1.5em;
+    font-size: 1.5em;
 }
 
 .App-intro {
-  font-size: large;
+    font-size: large;
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
+
 #map {
-  width: 70%;
-  height: 100%;
+    width: 70%;
+    height: 100%;
 }
-.ListContainer{
-  width: 30%;
-  background-color: lightblue;
+
+.ListContainer {
+    width: 30%;
+    background-color: lightblue;
 }
+
 .List {
-  list-style: none;
-  display: block;
-  padding: 10px;
-  float: left;
-  position: absolute;
-  top: 90px;
-}
-.ListItem {
-  padding: 10px;
-  text-align: left;
-}
-.ListItem a {
-   cursor: pointer;
-}
-#search {
-  position: absolute;
-  left: 0px;
-  top: 80px;
-  width: 25%;
-  border-radius: 5px;
-  margin-left: 10px;
-}
-@media only screen and (min-width:1000px){
-  #search{
-    width: 28%;
-  }
-}
-@media only screen and (min-width: 640px) and (max-width: 999px){
-  #search{
-    width: 33%;
-    top: 100px;
-  }
-  .List{
-    padding: 0;
-    top: 110px;
-    font-size: 0.76em;
-    font-weight: 600;
-  }
-  .ListContainer{
-    width: 40%;
-  }
-}
-@media only screen and (max-width:639px){
-  .show{
+    list-style: none;
     display: block;
-  }
-  .hide{
-    display: none;
-  }
-  .ListContainer{
-    width: 160%;
-  }
-  #menuItem{
-    display: inline;
+    padding: 10px;
+    float: left;
     position: absolute;
-    z-index: 100;
-    top: 60px;
-    right: 8px;
-    padding: 7px;
-    font-size: 1.1em;
-    border-style: solid;
-    background-color: white;
-  }
-  .List{
-    padding: 0;
-    top: 105px;
-    font-size: 0.64em;
-    font-weight: 600;
-  }
-  #map{
-    width: 100%;
-  }
-  #search{
-    top: 100px;
-    width: 45%;
-  }
+    top: 90px;
+}
+
+.ListItem {
+    padding: 10px;
+    text-align: left;
+}
+
+.ListItem a {
+    cursor: pointer;
+}
+
+#search {
+    position: absolute;
+    left: 0px;
+    top: 80px;
+    width: 25%;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+@media only screen and (min-width:1000px) {
+    #search {
+        width: 28%;
+    }
+}
+
+@media only screen and (min-width: 640px) and (max-width: 999px) {
+    #search {
+        width: 33%;
+        top: 100px;
+    }
+    .List {
+        padding: 0;
+        top: 110px;
+        font-size: 0.76em;
+        font-weight: 600;
+    }
+    .ListContainer {
+        width: 40%;
+    }
+}
+
+@media only screen and (max-width:639px) {
+    .show {
+        display: block;
+    }
+    .hide {
+        display: none;
+    }
+    .ListContainer {
+        width: 160%;
+    }
+    #menuItem {
+        display: inline;
+        position: absolute;
+        z-index: 100;
+        top: 60px;
+        right: 8px;
+        padding: 7px;
+        font-size: 1.1em;
+        border-style: solid;
+        background-color: white;
+    }
+    .List {
+        padding: 0;
+        top: 105px;
+        font-size: 0.64em;
+        font-weight: 600;
+    }
+    #map {
+        width: 100%;
+    }
+    #search {
+        top: 100px;
+        width: 45%;
+    }
 }
