@@ -24,3 +24,7 @@ click the drop down menu on the left side, select the filter option, correspondi
 ### Maps 
 
 - [Google Maps Api](https://developers.google.com/maps/documentation/javascript/tutorial)
+
+### Location information
+
+- [Bing Maps REST Services](https://msdn.microsoft.com/en-us/library/ff701713.aspx)
