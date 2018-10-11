@@ -2,31 +2,24 @@ import React, { Component } from 'react';
 import ListView from './ListView';
 
 /* global google */
-
+const locationArray = [{ id: 1, title: 'Esslinger Burg(castle)', location: { lat: 48.744706, lng: 9.309553 }, category: 'Tourist Attraction' },
+{ id: 2, title: "L'Osteria Esslingen(Italian restaurant)", location: { lat: 48.741794, lng: 9.3052 }, category: 'restaurant' },
+{ id: 3, title: 'Altes Rathaus(town hall)', location: { lat: 48.742496, lng: 9.307749 }, category: 'Tourist Attraction' },
+{ id: 4, title: 'Pizzeria La Gondola(Italian restaurant)', location: { lat: 48.740956, lng: 9.305065 }, category: 'restaurant' },
+{ id: 5, title: 'Maille Park', location: { lat: 48.739811, lng: 9.30664 }, category: 'park' },
+{ id: 6, title: 'Weinerlebnispfad(Wine trail)', location: { lat: 48.744452, lng: 9.29973 }, category: 'Tourist Attraction' },
+{ id: 7, title: 'Torbogen Durchgang', location: { lat: 48.74174, lng: 9.306581 }, category: 'Tourist Attraction' },
+{ id: 8, title: 'rewe', location: { lat: 48.740515, lng: 9.30052 }, category: 'supermarket' }];
 class Map extends Component {
-  // initialize  all states and functiona of Map component
+  // initialize  all states and functions of Map component
   constructor(props) {
     super(props);
     this.changeShowingArea = this.changeShowingArea.bind(this);
     this.showInfoWindowForList = this.showInfoWindowForList.bind(this);
     this.state = {
       map: {},
-      locations: [{ id: 1, title: 'Esslinger Burg(castle)', location: { lat: 48.744706, lng: 9.309553 }, category: 'Tourist Attraction' },
-      { id: 2, title: "L'Osteria Esslingen(Italian restaurant)", location: { lat: 48.741794, lng: 9.3052 }, category: 'restaurant' },
-      { id: 3, title: 'Altes Rathaus(town hall)', location: { lat: 48.742496, lng: 9.307749 }, category: 'Tourist Attraction' },
-      { id: 4, title: 'Pizzeria La Gondola(Italian restaurant)', location: { lat: 48.740956, lng: 9.305065 }, category: 'restaurant' },
-      { id: 5, title: 'Maille Park', location: { lat: 48.739811, lng: 9.30664 }, category: 'park' },
-      { id: 6, title: 'Weinerlebnispfad(Wine trail)', location: { lat: 48.744452, lng: 9.29973 }, category: 'Tourist Attraction' },
-      { id: 7, title: 'Torbogen Durchgang', location: { lat: 48.74174, lng: 9.306581 }, category: 'Tourist Attraction' },
-      { id: 8, title: 'rewe', location: { lat: 48.740515, lng: 9.30052 }, category: 'supermarket' }],
-      showingLocations: [{ id: 1, title: 'Esslinger Burg(castle)', location: { lat: 48.744706, lng: 9.309553 }, category: 'Tourist Attraction' },
-      { id: 2, title: "L'Osteria Esslingen(Italian restaurant)", location: { lat: 48.741794, lng: 9.3052 }, category: 'restaurant' },
-      { id: 3, title: 'Altes Rathaus(town hall)', location: { lat: 48.742496, lng: 9.307749 }, category: 'Tourist Attraction' },
-      { id: 4, title: 'Pizzeria La Gondola(Italian restaurant)', location: { lat: 48.740956, lng: 9.305065 }, category: 'restaurant' },
-      { id: 5, title: 'Maille Park', location: { lat: 48.739811, lng: 9.30664 }, category: 'park' },
-      { id: 6, title: 'Weinerlebnispfad(Wine trail)', location: { lat: 48.744452, lng: 9.29973 }, category: 'Tourist Attraction' },
-      { id: 7, title: 'Torbogen Durchgang', location: { lat: 48.74174, lng: 9.306581 }, category: 'Tourist Attraction' },
-      { id: 8, title: 'rewe', location: { lat: 48.740515, lng: 9.30052 }, category: 'supermarket' }],
+      locations: locationArray,
+      showingLocations: locationArray,
       places: [],
       showingPlaces: [],
       infoWindow: {}
