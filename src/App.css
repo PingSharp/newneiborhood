@@ -59,6 +59,12 @@ body,
     background-color: lightblue;
 }
 
+.selectLabel {
+    position: absolute;
+    top: 100px;
+    left: 10px;
+}
+
 .List {
     list-style: none;
     display: block;
@@ -90,16 +96,19 @@ body,
     #search {
         width: 28%;
     }
+    .selectLabel {
+        top: 60px;
+    }
 }
 
 @media only screen and (min-width: 640px) and (max-width: 999px) {
     #search {
         width: 33%;
-        top: 100px;
+        top: 130px;
     }
     .List {
         padding: 0;
-        top: 110px;
+        top: 150px;
         font-size: 0.76em;
         font-weight: 600;
     }
@@ -131,15 +140,18 @@ body,
     }
     .List {
         padding: 0;
-        top: 105px;
+        top: 130px;
         font-size: 0.64em;
         font-weight: 600;
+    }
+    .selectLabel {
+        top: 100px;
     }
     #map {
         width: 100%;
     }
     #search {
-        top: 100px;
+        top: 120px;
         width: 45%;
     }
 }

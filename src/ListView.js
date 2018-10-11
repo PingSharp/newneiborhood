@@ -9,7 +9,8 @@ const ListView = ({
 }) => {
     return (
         <div className="ListContainer hide" style={{ height: mapHeight }}>
-            <h1 tabIndex="0" role="heading">Esslingen Location</h1>
+            <h1 tabIndex="0" role="heading">Esslingen Location</h1>          
+            <label className="selectLabel" for='search'>Select Category:</label>
             <select tabIndex="0" role="menu" id="search" defaultValue={'All'} onChange={findArea}>
                 <option role="menuitem" value='All' aria-selected='true' >All</option>
                 <option role="menuitem" value='Tourist Attraction'>Tourist Attraction</option>
