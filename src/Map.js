@@ -43,6 +43,11 @@ class Map extends Component {
         script.src = `https://maps.googleapis.com/maps/api/js?key=${API}&callback=resolveGoogleMapsPromise&libraries=geometry,places`;
         script.async = true;
         script.defer = true;
+        script.onerror = function(){
+          let map = document.getElementById('map');
+          let message = '<p>Error ocured in the script element!</p>';
+          map.innerHTML= message;
+        }
         document.body.appendChild(script);
       });
     }
